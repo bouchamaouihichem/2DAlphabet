@@ -16,13 +16,12 @@ import math
 
 VERBOSE = True
 NTOY    = 100       ## Number of toys for goodness-of-fit (GoF) test
-CAT     = 'XXHi'    ## Event selection category, e.g. gg0l, VBFjj, Wlv, Zll, Zvv, ...
+#CAT     = 'XXHi'    ## Event selection category, e.g. gg0l, VBFjj, Wlv, Zll, Zvv, ...
 #CAT     = 'XXLo'    ## Event selection category, e.g. gg0l, VBFjj, Wlv, Zll, Zvv, ...
 #CAT     = 'gg0lIncl'
 #CAT     = 'VBFjjLo_Xto4bv2'
-CAT     = 'VBFjjHi_Xto4bv2'
-
-
+#CAT     = 'VBFjjHi_Xto4bv2'
+CAT = sys.argv[2]
 
 CATL    = CAT       ## Selection category with lepton "l" instead of mu "m" or ele "e"
 MASSH   = 'pnet'    ## Higgs mass regression (mass, msoft, pnet)
@@ -40,7 +39,9 @@ SS_DIR = '/eos/cms/store/user/ssawant/htoaa/analysis/'
 HB_DIR = '/afs/cern.ch/user/h/hboucham/public/'
 MD_DIR = '/afs/cern.ch/user/m/moanwar/public/'
 AB_DIR = '/afs/cern.ch/work/a/abrinke1/public/HiggsToAA/coffea/eventloop/plots/'
-YH_DIR = '/afs/cern.ch/work/y/yilai/Haa4b/datacards/CMSSW_11_3_4/src/2DAlphabet/plots/'
+#YH_DIR = '/afs/cern.ch/work/y/yilai/Haa4b/datacards/CMSSW_11_3_4/src/2DAlphabet/plots/'
+#YH_DIR = '/afs/cern.ch/user/h/hboucham/work/H4B/CMSSW_11_3_4/src/2DAlphabet/plots/'
+
 
 if CAT == 'gg0l' or CAT == 'gg0lIncl' or CAT == 'gg0lHi' or CAT == 'gg0lLo':
     # PATH    = SS_DIR+'20240530_ggH0l_for2DAlphabet/2018/2DAlphabet_inputFiles'
@@ -106,13 +107,13 @@ if CAT == 'Zll' or CAT == 'Zmm' or CAT == 'Zee':
     FITLIST = ['0x0']
     NOMTF   = 0.18    ## Nominal fail-to-pass transfer factor (18%)
 if CAT == 'LepHi' or CAT == 'XXHi':  ## WlvHi + ttbblv + ttbll + ttbbll + Zll + ZvvHi
-    PATH    = YH_DIR+'HtoAA_2DAlphabet_merge_inputs_'+CAT+'/2025_04_04_mAa'
+    PATH    = 'plots/HtoAA_2DAlphabet_merge_inputs_'+CAT+'/2025_04_04_mAa'
     SIGS    = ['WH','ttH','ZH']
     FIT     =  '1d1C'
     FITLIST = ['1d1C']
     NOMTF   = 0.11
 if CAT == 'XXLo':  ## WlvLo + ttblv + ZvvLo
-    PATH    = YH_DIR+'HtoAA_2DAlphabet_merge_inputs_'+CAT+'/2025_04_04_mAa'
+    PATH    = 'plots/HtoAA_2DAlphabet_merge_inputs_'+CAT+'/2025_04_04_mAa'
     SIGS    = ['WH','ttH']
     FIT     =  '1x1C'
     FITLIST = ['1x1C']

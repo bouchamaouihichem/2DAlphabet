@@ -29,8 +29,11 @@ DATE     = '2025_04_04_mA'+ MA_reg
 # Comment out category as needed
 #CAT_OUT = 'XXHi'
 #CAT_OUT = 'XXLo'
-CAT_OUT = 'gg0lIncl'
+#CAT_OUT = 'gg0lIncl'
 
+CAT_OUT = sys.argv[1]
+
+print("Running Merge script for the following category: ", CAT_OUT)
 if CAT_OUT == 'gg0lIncl':
     MASSESH  = ['pnet_vs_massA34a']
     MA_reg = '34a'

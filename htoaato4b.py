@@ -13,21 +13,38 @@ from TwoDAlphabet.helpers import make_env_tarball
 import os
 import sys
 import math
+import argparse
+
+
+# Create an argument parser
+parser = argparse.ArgumentParser(description="Plotting argument parser.")
+parser.add_argument('--CAT', type=str, help='Specify Category <XXHi|XXLo>')
+parser.add_argument('--mH', type=str, help='Specify mH branch <pnet|mass|msoft>')
+parser.add_argument('--WP', type=str, help='Specify WP <WP40|WP60|WP80>')
+
+# Parse the arguments from the command line
+args = parser.parse_args()
+CAT     = args.CAT
+WP    = args.WP
+MASSH    = args.mH
+
+#python3 htoaato4b.py --CAT="XXHi" --mH="pnet" --WP="WP60"
+######################################
 
 VERBOSE = True
 NTOY    = 100       ## Number of toys for goodness-of-fit (GoF) test
 #CAT     = 'Zll'    ## Event selection category, e.g. gg0l, VBFjj, Wlv, Zll, Zvv, ...
 #CAT     = 'XXHi'    ## Event selection category, e.g. gg0l, VBFjj, Wlv, Zll, Zvv, ...
-CAT     = 'XXLo'    ## Event selection category, e.g. gg0l, VBFjj, Wlv, Zll, Zvv, ...
+#CAT     = 'XXLo'    ## Event selection category, e.g. gg0l, VBFjj, Wlv, Zll, Zvv, ...
 #CAT     = 'XX'    ## Event selection category, e.g. gg0l, VBFjj, Wlv, Zll, Zvv, ...
 CATL    = CAT       ## Selection category with lepton "l" instead of mu "m" or ele "e"
 #MASSH   = 'mass'    ## Higgs mass regression (mass, msoft, pnet)
-MASSH   = 'pnet'    ## Higgs mass regression (mass, msoft, pnet)
+#MASSH   = 'pnet'    ## Higgs mass regression (mass, msoft, pnet)
 #MASSH   = 'msoft'    ## Higgs mass regression (mass, msoft, pnet)
 MASSESA = ['15','30','55']  ## Masses of "a" boson
 MASSA   = ('%sto%s' % (MASSESA[0], MASSESA[-1]) if len(MASSESA) > 1 else MASSESA[0])
 #WP      = 'WP40'    ## Hto4b efficiency working point
-WP      = 'WP60'    ## Hto4b efficiency working point
+#WP      = 'WP60'    ## Hto4b efficiency working point
 #WP      = 'WP80'    ## Hto4b efficiency working point
 YEAR    = '2018'    ## Data year
 ## Polynomial fit: "x" for 2D with cross terms, "d" without cross terms
@@ -87,13 +104,13 @@ if CAT == 'Zll' or CAT == 'Zmm' or CAT == 'Zee':
     FITLIST = ['0x0']
     NOMTF   = 0.18    ## Nominal fail-to-pass transfer factor (18%)
 if CAT == 'LepHi' or CAT == 'XXHi':  ## WlvHi + ttbblv + ttbll + ttbbll + Zll + ZvvHi
-    PATH    = AB_DIR+'HtoAA_2DAlphabet_merge_inputs_'+CAT+'/2025_03_06_mAa'
+    PATH    = AB_DIR+'HtoAA_2DAlphabet_merge_inputs_'+CAT+'/2025_04_15_mAa'
     SIGS    = ['WH','ttH','ZH']
     FIT     =  '1d1C'
     FITLIST = ['1d1C']
     NOMTF   = 0.11
 if CAT == 'XXLo':  ## WlvLo + ttblv + ZvvLo
-    PATH    = AB_DIR+'HtoAA_2DAlphabet_merge_inputs_'+CAT+'/2025_03_06_mAa'
+    PATH    = AB_DIR+'HtoAA_2DAlphabet_merge_inputs_'+CAT+'/2025_04_15_mAa'
     #SIGS    = ['WH','ttH','ZH']
     SIGS    = ['WH','ttH']
     FIT     =  '1x1C'

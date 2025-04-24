@@ -1,15 +1,20 @@
 import ROOT
 import os
 import numpy as np
+import sys
 
 ROOT.gROOT.SetBatch(True)
 
 base_pth=None
-category = "VBF_Hi"
+#category = "VBF_Hi"
 #category = "VBF_Lo"
-#category = "gg0lIncl"
+#category = "gg0lIncl" 
 #category = "Leptonic_Hi"
 #category = "Leptonic_Lo"
+
+category = sys.argv[1]
+
+print("Running MC Sum script for the following category: ", category)
 
 if category == "Leptonic_Hi" or category == "Leptonic_Lo" or category == "gg0lIncl":
     base_pth="./raw_inputs/"

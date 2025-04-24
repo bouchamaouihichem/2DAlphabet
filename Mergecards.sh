@@ -1,10 +1,11 @@
 #!/bin/bash
 
+NTOYS=$1
 export mass_points=(15 30 55)
 export mass_points=(30)
 for i in "${mass_points[@]}"
 do
-for it in $(seq 0 1 1)
+for it in $(seq 0 1 "$NTOYS")
 do
     export Leptonic_cards="$( ls mctoysjson/fits_XX*_Htoaato4b_mH_pnet_mA_15to55_WP60_2018_toy${it}/mA_${i}_area/card*txt | sed 's/ / /g' | tr '\n' ' ' | sed 's/ $//' )"
     export ggH_cards="$( ls mctoysjson/fits_gg0lIncl_Htoaato4b_mH_pnet_vs_massA34a_mA_15to55_WP40_2018_toy${it}/mA_${i}_area/card*txt | sed 's/ / /g' | tr '\n' ' ' | sed 's/ $//' )"

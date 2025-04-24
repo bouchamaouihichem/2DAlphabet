@@ -19,7 +19,7 @@ MASSESA  = ['15', '30', '55']
 WP_CUTS  = ['WP40', 'WP60', 'WP80']
 #WP_CUTS  = ['WP60']
 MA_reg = 'a'
-DATE     = '2025_03_06_mA'+ MA_reg
+DATE     = '2025_04_15_mA'+ MA_reg
 
 # BKGS = ['Wlv', 'TT1l']
 
@@ -27,8 +27,8 @@ DATE     = '2025_03_06_mA'+ MA_reg
 # CAT_INS = ['WlvHi', 'ttbblv', 'Zll']
 
 # Comment out category as needed
-#CAT_OUT = 'XXHi'
-CAT_OUT = 'XXLo'
+CAT_OUT = 'XXHi'
+#CAT_OUT = 'XXLo'
 #CAT_OUT = 'XX'
 #CAT_OUT = 'Zll'
 
@@ -37,13 +37,13 @@ if CAT_OUT == 'XXHi':
   CATS_IN = {}
   for cat in CAT_INS:
       CATS_IN[cat] = {}
-  CATS_IN['WlvHi']['dir']   = '/afs/cern.ch/user/h/hboucham/public/2D_Alphabet_Inputs/2D_1L_030625_mA'+MA_reg+'/'
+  CATS_IN['WlvHi']['dir']   = '/afs/cern.ch/user/h/hboucham/public/2D_Alphabet_Inputs/2D_1L_041525_mA_'+MA_reg+'/'
   CATS_IN['WlvHi']['sigs']  = ['WHtoaato4b']
-  CATS_IN['ttbblv']['dir']  = '/afs/cern.ch/user/h/hboucham/public/2D_Alphabet_Inputs/2D_1L_030625_mA'+MA_reg+'/'
+  CATS_IN['ttbblv']['dir']  = '/afs/cern.ch/user/h/hboucham/public/2D_Alphabet_Inputs/2D_1L_041525_mA_'+MA_reg+'/'
   CATS_IN['ttbblv']['sigs'] = ['ttHtoaato4b']
-  CATS_IN['ttbll']['dir']   = '/afs/cern.ch/user/h/hboucham/public/2D_Alphabet_Inputs/2D_2Ltt_030625_mA'+MA_reg+'/'
+  CATS_IN['ttbll']['dir']   = '/afs/cern.ch/user/h/hboucham/public/2D_Alphabet_Inputs/2D_2Ltt_041525_mA_'+MA_reg+'/'
   CATS_IN['ttbll']['sigs']  = ['ttHtoaato4b']
-  CATS_IN['Zll']['dir']     = '/afs/cern.ch/user/h/hboucham/public/2D_Alphabet_Inputs/2D_2LZ_030625_mA'+MA_reg+'/'
+  CATS_IN['Zll']['dir']     = '/afs/cern.ch/user/h/hboucham/public/2D_Alphabet_Inputs/2D_2LZ_041525_mA_'+MA_reg+'/'
   CATS_IN['Zll']['sigs']    = ['ZHtoaato4b']
   #CATS_IN['ZvvHi']['dir']   = '/eos/cms/store/user/ssawant/htoaa/analysis/20250305_Zvv_FullSyst/2018/2DAlphabet_inputFiles/ZvvHi/'
   #CATS_IN['ZvvHi']['sigs']  = ['ZHtoaato4b']
@@ -52,9 +52,9 @@ elif CAT_OUT == 'XXLo':
   CATS_IN = {}
   for cat in CAT_INS:
      CATS_IN[cat] = {}
-  CATS_IN['WlvLo']['dir']   = '/afs/cern.ch/user/h/hboucham/public/2D_Alphabet_Inputs/2D_1L_030625_mA'+MA_reg+'/'
+  CATS_IN['WlvLo']['dir']   = '/afs/cern.ch/user/h/hboucham/public/2D_Alphabet_Inputs/2D_1L_041525_mA_'+MA_reg+'/'
   CATS_IN['WlvLo']['sigs']  = ['WHtoaato4b']
-  CATS_IN['ttblv']['dir']  = '/afs/cern.ch/user/h/hboucham/public/2D_Alphabet_Inputs/2D_1L_030625_mA'+MA_reg+'/'
+  CATS_IN['ttblv']['dir']  = '/afs/cern.ch/user/h/hboucham/public/2D_Alphabet_Inputs/2D_1L_041525_mA_'+MA_reg+'/'
   CATS_IN['ttblv']['sigs'] = ['ttHtoaato4b']
   #CATS_IN['ZvvLo']['dir'] = '/eos/cms/store/user/ssawant/htoaa/analysis/20250305_Zvv_FullSyst/2018/2DAlphabet_inputFiles/ZvvLo/'
   #CATS_IN['ZvvLo']['sigs']  = ['ZHtoaato4b']

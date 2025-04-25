@@ -25,7 +25,6 @@ git fetch origin
 git checkout py3
 python setup.py develop
 git checkout master
-python setup.py develop
 mkdir plots
 mkdir plots/HtoAA_2DAlphabet_merge_inputs_XXHi/
 mkdir plots/HtoAA_2DAlphabet_merge_inputs_XXLo/

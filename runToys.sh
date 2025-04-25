@@ -9,7 +9,7 @@
 START_TIME=$SECONDS
 
 # Adjust number of toys
-NTOYS='50' #minimum 2
+NTOYS='2' #minimum 2
 
 INPUT_DIR='raw_inputs'
 OUTPUT_DIR='raw_outputs'

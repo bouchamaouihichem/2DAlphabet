@@ -45,10 +45,10 @@ merge sub-categories into XXHi/XXLo by editing ```merge_file_script.py```
 - ```python3 merge_file_script.py```
 
 Run 2D Alphabet after editing ```htoaato4b.py```:
-- adjust input file directory (e.g: ```PATH    = AB_DIR+'HtoAA_2DAlphabet_merge_inputs_'+CAT+'/2025_03_06_mAa'```)
-- adjust the following parameters: category ```CAT = [XXHi/XXLo]```, Higgs mass ```MASSH = [pnet/mass/msoft]```, working point ```WP = [WP40/WP60/WP80]```, year ```YEAR = [2018/2017/2016]```.
+- adjust input file directory (e.g: ```PATH    = AB_DIR+'HtoAA_2DAlphabet_merge_inputs_'+CAT+'/2025_03_06_mAa'```) and year ```YEAR = [2018/2017/2016]```.
+- The following parameters can be passed as arguments: category ```CAT = [XXHi/XXLo]```, Higgs mass ```MASSH = [pnet/mass/msoft]```, working point ```WP = [WP40/WP60/WP80]```.
 - optional but not recommended unless you know what you're doing: adjust fit ```FIT     =  '1d1C'```, nominal fail-to-pass transfer factor ```NOMTF   = 0.10 ``` and binning and more in the corresponding json files (e.g: ```XXHi_Htoaato4b.json```)
-- ```python3 htoaato4b.py```
+- e.g: ```python3 htoaato4b.py --CAT="XXHi" --mH="pnet" --WP="WP60"```
 - 2D alphabet output directory example: ```fits_XX_Htoaato4b_mH_mass_mA_15to55_WP80_2018/```
 
 Other scripts:

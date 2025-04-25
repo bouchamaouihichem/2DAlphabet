@@ -27,8 +27,8 @@ DATE     = '2025_04_15_mA'+ MA_reg
 # CAT_INS = ['WlvHi', 'ttbblv', 'Zll']
 
 # Comment out category as needed
-CAT_OUT = 'XXHi'
-#CAT_OUT = 'XXLo'
+#CAT_OUT = 'XXHi'
+CAT_OUT = 'XXLo'
 #CAT_OUT = 'XX'
 #CAT_OUT = 'Zll'
 

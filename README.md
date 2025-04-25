@@ -16,20 +16,26 @@ git checkout CMSSW_11_3_X
 cd ../
 scramv1 b clean
 scramv1 b -j 8
-git clone -b git@github.com:bouchamaouihichem/2DAlphabet.git
+git clone git@github.com:bouchamaouihichem/2DAlphabet.git
+cmsenv
 python3 -m virtualenv twoD-env
 source twoD-env/bin/activate
 cd 2DAlphabet/
+git fetch origin
+git checkout py3
+python setup.py develop
+git checkout master
 python setup.py develop
 mkdir plots
 mkdir plots/HtoAA_2DAlphabet_merge_inputs_XXHi/
 mkdir plots/HtoAA_2DAlphabet_merge_inputs_XXLo/
+mkdir plots/HtoAA_2DAlphabet_merge_inputs_gg0lIncl/
 ```
 
 
 # Running instructions
 ```
-cd /afs/cern.ch/user/h/hboucham/work/H4B/CMSSW_11_3_4/src/
+cd /afs/cern.ch/work/h/hboucham/Haa4b/2D_Alphabet/CMSSW_11_3_4/src/
 cmssw-el7 
 cmsenv
 voms-proxy-init --voms cms
@@ -54,6 +60,7 @@ Run 2D Alphabet after editing ```htoaato4b.py```:
 Other scripts:
 - ```XXCAT_yields.py```: returns yield table given merge directory (e.g: ```python3 XXCAT_yields.py plots/HtoAA_2DAlphabet_merge_inputs_XXHi/2025_03_06_mAa/```)
 - ```HtoAA_StoB_estimate.py```: After selecting a sub-category ```current = "Zll"```, a working point ```"WP_CUTS": ['WP60'] ``` and updating the input directory ```"IN_DIR": '/afs/cern.ch/user/h/hboucham/public/2D_Alphabet_Inputs/2D_2LZ_021525_CAT34_mA34a_mH/'```, this script returns a sub-category purity and conservative limits using signal and data yields (e.g: ```python3  HtoAA_StoB_estimate.py```)
+- ```runToys.sh```: Runs 2D Alphabet using MC with NTOYS (usage: ```bash runToys.sh```). By default runs for m(a) = 30 GeV and for all categories (LEPHi/Lo, VBFHi/Lo and ggH), but can specify NTOYS.
 
 # Haa4b 2D plots (input root files and TH2D) naming convention:
 File name: CAT_PROC_YEAR.root

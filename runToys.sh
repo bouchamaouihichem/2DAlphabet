@@ -47,8 +47,8 @@ mkdir -p plots/HtoAA_2DAlphabet_merge_inputs_XXHi/2025_04_04_mAa/
 python3 merge_file_script_mctoy.py XXHi
 python3 merge_file_script_mctoy.py XXLo
 ### run Haa4b_makeMCtoy.py to make MC sum
-python3 Haa4b_makeMCtoy.py Leptonic_Hi
-python3 Haa4b_makeMCtoy.py Leptonic_Lo
+python3 Haa4b_makeMCtoy.py Leptonic_Hi $NTOYS
+python3 Haa4b_makeMCtoy.py Leptonic_Lo $NTOYS
 
 # -- VBF --
 mv plots/2DAlphabetfiles_VBF_inputs/VBFHi_Xto4bv2/VBFjjHi_Xto4bv2_Data_2018.root plots/2DAlphabetfiles_VBF_inputs/VBFHi_Xto4bv2/VBFjjHi_Xto4bv2_MC_2018.root
@@ -56,8 +56,8 @@ mv plots/2DAlphabetfiles_VBF_inputs/VBFHi_Xto4bv2/VBFjjHi_Xto4bv2_Data_2018_back
 mv plots/2DAlphabetfiles_VBF_inputs/VBFLo_Xto4bv2/VBFjjLo_Xto4bv2_Data_2018.root plots/2DAlphabetfiles_VBF_inputs/VBFLo_Xto4bv2/VBFjjLo_Xto4bv2_MC_2018.root
 mv plots/2DAlphabetfiles_VBF_inputs/VBFLo_Xto4bv2/VBFjjLo_Xto4bv2_Data_2018_backup.root plots/2DAlphabetfiles_VBF_inputs/VBFLo_Xto4bv2/VBFjjLo_Xto4bv2_Data_2018.root
 ### run Haa4b_makeMCtoy.py to make MC sum
-python3 Haa4b_makeMCtoy.py VBF_Hi
-python3 Haa4b_makeMCtoy.py VBF_Lo
+python3 Haa4b_makeMCtoy.py VBF_Hi $NTOYS
+python3 Haa4b_makeMCtoy.py VBF_Lo $NTOYS
 
 # -- ggH --
 mkdir -p plots/HtoAA_2DAlphabet_merge_inputs_gg0lIncl/2025_04_04_mAa/
@@ -66,7 +66,7 @@ mv raw_inputs/20250403_Pseudodata/2DAlphabet_inputFiles_pseudodata_0/gg0lIncl/gg
 ### run merge_file_script_mctoy.py to get input files for ggH Inclusive
 python3 merge_file_script_mctoy.py gg0lIncl
 ### run Haa4b_makeMCtoy.py to make MC sum
-python3 Haa4b_makeMCtoy.py gg0lIncl
+python3 Haa4b_makeMCtoy.py gg0lIncl $NTOYS
 
 
 

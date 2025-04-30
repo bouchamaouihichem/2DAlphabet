@@ -352,7 +352,7 @@ def toys_generator(hist1, hist2, ntoyes, output_filename):
 
 # Fix to use the same number of toys set in RunToys.sh
 #Ntoys=50
-NToys = sys.argv[2]
+Ntoys = int(sys.argv[2])
 
 toys_generator(BKGMCTotal_pass_Smooth1, BKGMCTotal_fail_Smooth1, Ntoys, output_hist_name)
 

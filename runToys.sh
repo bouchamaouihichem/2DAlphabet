@@ -69,12 +69,13 @@ python3 merge_file_script_mctoy.py gg0lIncl
 python3 Haa4b_makeMCtoy.py gg0lIncl $NTOYS
 
 
-
 # Run N toys and make Datacards
 echo " > Run N toys and make Datacards .. "
 
 for k in XXHi XXLo VBFjjHi_Xto4bv2 VBFjjLo_Xto4bv2 gg0lIncl; do
-  for i in $(seq 0 1 "$NTOYS"); do
+#for k in XXHi; do
+  #for i in $(seq 0 1 "$NTOYS"+1); do
+  for ((i = 0; i < NTOYS; i++)); do
     echo ">>>>>>>>>> Making Toy number = $i of channel = $k"
     python3 htoaato4b_mctoy.py "$i" "$k"
 
@@ -114,7 +115,6 @@ mv *png "$OUTPUT_DIR"
 mv higgsCombine.* "$OUTPUT_DIR"
 mv fitDiagnostics.* "$OUTPUT_DIR"
 mv combine_logger.out "$OUTPUT_DIR"
-
 
 # Calculate elapsed time 
 ELAPSED=$((SECONDS - START_TIME))

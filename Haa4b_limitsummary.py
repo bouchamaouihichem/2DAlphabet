@@ -6,20 +6,27 @@ ROOT.gROOT.SetBatch(True)
 import glob
 ROOT.gStyle.SetOptStat(0)  ## Don't display stat boxes
 
+# The expected limits for M-15 and M-55 GeV are placeholders until Yihui
+# runs the datacards again to obtain the real values 
 data_expected_list={
-    'leptonic_30':0.0337, 'vbf_30':0.0503, 'ggh_30':0.0327, 'all_30':0.0171
+    'leptonic_15':0.0337, 'vbf_15':0.0503, 'ggh_15':0.0327, 'all_15':0.0171,
+    'leptonic_30':0.0337, 'vbf_30':0.0503, 'ggh_30':0.0327, 'all_30':0.0171,
+    'leptonic_55':0.0337, 'vbf_55':0.0503, 'ggh_55':0.0327, 'all_55':0.0171,
 }
 
 for channel in ['leptonic', 'vbf', 'ggh', 'all']:
-    for mass in ['30']:
+    for mass in ['15', '30', '55']:
+    #for mass in ['30']:
         # Input files
         file_pattern = f"higgsCombine.testAsymptoticLimits.ma_{mass}.{channel}.toy*.AsymptoticLimits.mH120.root"
-        data_file = "data.root"
+        #data_file = "data.root"
         # Get list of toy files
         files = glob.glob(file_pattern)
         # Create histograms
-        h_exp = ROOT.TH1F("h_exp", "Expected and Observed Limits;Limit;Events", 20, 0, 0.1)
-        h_obs = ROOT.TH1F("h_obs", "Expected and Observed Limits;Limit;Events", 20, 0, 0.1)
+        h_exp = ROOT.TH1F(f"h_exp_{channel}_{mass}", "Expected and Observed Limits;Limit;Events", 100, 0, 0.1)
+        h_obs = ROOT.TH1F(f"h_obs_{channel}_{mass}", "Expected and Observed Limits;Limit;Events", 100, 0, 0.1)
+        #h_exp = ROOT.TH1F("h_exp", "Expected and Observed Limits;Limit;Events", 100, 0, 0.1)
+        #h_obs = ROOT.TH1F("h_obs", "Expected and Observed Limits;Limit;Events", 100, 0, 0.1)
         for f in files:
             if not os.path.isfile(f):
                 continue
@@ -49,6 +56,7 @@ for channel in ['leptonic', 'vbf', 'ggh', 'all']:
         #                    data_expected = entry.limit
         #                    break
         #        f_data.Close()
+
         data_expected = data_expected_list[f"{channel}_{mass}"]
         
         # Styling
@@ -58,7 +66,8 @@ for channel in ['leptonic', 'vbf', 'ggh', 'all']:
         h_obs.SetLineWidth(2)
         
         # Draw
-        c = ROOT.TCanvas("c", "", 800, 600)
+        #c = ROOT.TCanvas("c", "", 800, 600)
+        c = ROOT.TCanvas(f"c_{channel}_{mass}", "", 800, 600)
         h_exp.Draw("hist")
         h_obs.Draw("hist same")
         
@@ -71,7 +80,7 @@ for channel in ['leptonic', 'vbf', 'ggh', 'all']:
             arrow.Draw()
         else:
             print("Could not extract expected value from data.root")
-        
+
         # Add legend
         legend = ROOT.TLegend(0.55, 0.7, 0.88, 0.85)
         legend.AddEntry(h_exp, "Expected (median, toys)", "l")

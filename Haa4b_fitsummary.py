@@ -8,10 +8,13 @@ ROOT.gStyle.SetOptStat(0)  ## Don't display stat boxes
 
 # File pattern for toy fit diagnostics
 for channel in ['leptonic', 'vbf', 'ggh', 'all']:
-    for mass in ['30']:
+    #for mass in ['15', '30', '55']:
+    # Fit data for 15 GeV is empty so ignore for now
+    for mass in ['30', '55']:
         file_pattern = f"fitDiagnostics.testFitDiagnostics.ma_{mass}.{channel}.toy*.root"
         files = glob.glob(file_pattern)
-        hist = ROOT.TH1F("h_rOverErr", "Bias in r (r / rErr);r / rErr;Fits", 20, -5, 5)
+        #hist = ROOT.TH1F("h_rOverErr", "Bias in r (r / rErr);r / rErr;Fits", 20, -5, 5)
+        hist = ROOT.TH1F(f"h_rOverErr_{channel}_{mass}", "Bias in r (r / rErr);r / rErr;Fits", 20, -5, 5)
         for f in files:
             if not os.path.isfile(f):
                 continue
@@ -47,7 +50,8 @@ for channel in ['leptonic', 'vbf', 'ggh', 'all']:
         fit_mean = fit_result.Parameter(1)
         fit_mean_err = fit_result.Parameter(2)
         print(f"Fitted bias (mean of r/rErr): {fit_mean:.4f} ± {fit_mean_err:.4f}")
-        c = ROOT.TCanvas("c", "", 800, 600)
+        #c = ROOT.TCanvas("c", "", 800, 600)
+        c = ROOT.TCanvas(f"c_{channel}_{mass}", "", 800, 600)
         hist.Draw("hist")
         fit_func.Draw("same")
         hist.GetFunction("gaus").SetLineColor(ROOT.kRed + 1)

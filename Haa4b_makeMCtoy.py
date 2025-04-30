@@ -350,7 +350,10 @@ def toys_generator(hist1, hist2, ntoyes, output_filename):
 #BKGMCTotal_fail_Smooth1.Write()
 #output_file.Close()  # Close the file
 
-Ntoys=50
+# Fix to use the same number of toys set in RunToys.sh
+#Ntoys=50
+Ntoys = int(sys.argv[2])
+
 toys_generator(BKGMCTotal_pass_Smooth1, BKGMCTotal_fail_Smooth1, Ntoys, output_hist_name)
 
 import json

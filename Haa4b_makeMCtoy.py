@@ -13,6 +13,7 @@ base_pth=None
 #category = "Leptonic_Lo"
 
 category = sys.argv[1]
+TOYorMC = sys.argv[4]
 
 print("Running MC Sum script for the following category: ", category)
 
@@ -248,7 +249,7 @@ for i in range(1, BKGMCTotal_pass_Smooth1.GetNbinsX() + 1):
         BKGMCTotal_fail_Smooth1.SetBinError(i, j, np.sqrt(BKGMCTotal_fail_Smooth1.GetBinContent(i,j)))
 
 
-# take dataHIST from workspace
+'''
 w1 = input_ws.Get("w")
 Nevt_allregions={}
 for IsPass in ["Pass", "Fail"]:
@@ -318,6 +319,91 @@ for IsPass in ["Pass", "Fail"]:
         if f"{IsPass}_{MHRegion}" !="Pass_SIG":
             compare_2D_histograms(data_obs1, data_obs2, mH_default, mA_default, f"{category}_{IsPass}_{MHRegion}")
         del hist_rebinned
+'''
+
+# take dataHIST from workspace
+# set True to compare to 2D Alphabet output "fit**'
+dataHIST_from_workspace=False
+workspace = sys.argv[3]
+if (workspace == "2Dworkspace"):
+  dataHIST_from_workspace=True
+if dataHIST_from_workspace:
+    w1 = input_ws.Get("w")
+    Nevt_allregions={}
+    for IsPass in ["Pass", "Fail"]:
+        Nevt_allregions[IsPass]=0
+        for MHRegion in ["LOW", "SIG", "HIGH"]:
+            print(f"----> {IsPass}_{MHRegion}")
+            data_obs1 = w1.data(f"data_obs_{IsPass}_{MHRegion}")
+            #print("Data Events: ", data_obs1.numEntries())
+            mH_default = w1.var(f"mH_{MHRegion}_default")
+            mA_default = w1.var("mA_default")
+            Total_events1=0
+            for i in range(data_obs1.numEntries()):
+                var_set = data_obs1.get(i)
+                weight = data_obs1.weight()
+                mH_val = var_set.getRealValue(f"mH_{MHRegion}_default")  # Extract mH value
+                mA_val = var_set.getRealValue("mA_default")  # Extract mA value
+                Total_events1 += weight
+                #print( f"Bin {i}, (mH = {mH_val}, mA = {mA_val}): {weight}")
+            Nevt_allregions[IsPass]+=Total_events1
+            #print("total: ", Total_events1)
+            nbins_mH = mH_default.getBins()  # Default number of bins in mH
+            nbins_mA = mA_default.getBins()  # Default number of bins in mA
+            low_mH = mH_default.getMin()
+            high_mH = mH_default.getMax()
+            low_mA = mA_default.getMin()
+            high_mA = mA_default.getMax()
+            hist_rebinned = ROOT.TH2F("hist_rebinned", "Rebinned Histogram",
+                                      nbins_mH, low_mH, high_mH,
+                                      nbins_mA, low_mA, high_mA)
+            
+            BKGMCTotal_tofill = BKGMCTotal_pass_Smooth1
+            if IsPass=="Fail":
+                BKGMCTotal_tofill = BKGMCTotal_fail_Smooth1
+            for i in range(1, BKGMCTotal_tofill.GetNbinsX() + 1):
+                for j in range(1, BKGMCTotal_tofill.GetNbinsY() + 1):
+                    x_center = BKGMCTotal_tofill.GetXaxis().GetBinCenter(i)
+                    y_center = BKGMCTotal_tofill.GetYaxis().GetBinCenter(j)
+                    content = BKGMCTotal_tofill.GetBinContent(i, j)
+                    # Find the new bin index and fill the rebinned histogram
+                    binx = hist_rebinned.GetXaxis().FindBin(x_center)
+                    biny = hist_rebinned.GetYaxis().FindBin(y_center)
+                    content_org = hist_rebinned.GetBinContent(binx, biny)
+                    #print(x_center, y_center, binx, biny)
+                    hist_rebinned.SetBinContent(binx, biny, content + content_org)
+                    hist_rebinned.SetBinError(binx, biny, np.sqrt(content + content_org))
+            #hist_rebinned.Scale(Total_events1*1.0/hist_rebinned.Integral())
+            print("Remake data_obs")
+            data_obs2 = ROOT.RooDataHist(f"data_obs_mc_{IsPass}_{MHRegion}", "Binned dataset from histogram",
+                                         ROOT.RooArgList(mH_default, mA_default),
+                                         hist_rebinned)
+            w1.Import(data_obs2)  # Import data_obs2 into the workspace w1
+            Total_events2=0
+            for i in range(data_obs2.numEntries()):
+                var_set = data_obs2.get(i)
+                weight = data_obs2.weight()
+                mH_val = var_set.getRealValue(f"mH_{MHRegion}_default")  # Extract mH value
+                mA_val = var_set.getRealValue("mA_default")  # Extract mA value
+                Total_events2 +=weight
+                if weight<0:
+                    print( f"Bin {i}, (mH = {mH_val}, mA = {mA_val}): {weight}")
+                    if f"{IsPass}"=="Fail":
+                        exit()
+            print("total ws, raw hist: ", Total_events2, Total_events1)
+            if(abs(Total_events1-Total_events2)/Total_events1 > 0.2) :
+                print("----- Something is wrong! -----")
+                #exit()
+            if f"{IsPass}_{MHRegion}" !="Pass_SIG":
+                compare_2D_histograms(data_obs1, data_obs2, mH_default, mA_default, f"{category}_{IsPass}_{MHRegion}")
+            del hist_rebinned
+else:
+    Nevt_allregions={}
+    data_pass = input_ws.Get(f"{category}_Data_2018_pnet_vs_massA34a_WP40_Pass_Nom")
+    data_fail = input_ws.Get(f"{category}_Data_2018_pnet_vs_massA34a_WP40_Fail_Nom")
+    Nevt_allregions["Pass"] = data_pass.Integral()
+    Nevt_allregions["Fail"] = data_fail.Integral()
+
 
 
 BKGMCTotal_pass_Smooth1.Scale( Nevt_allregions["Pass"]*1.0/BKGMCTotal_pass_Smooth1.Integral() )
@@ -332,15 +418,25 @@ def toys_generator(hist1, hist2, ntoyes, output_filename):
         for ix in range(1, hist1.GetNbinsX() + 1):
             for iy in range(1, hist1.GetNbinsY() + 1):
                 expected = hist1.GetBinContent(ix, iy)
-                fluctuated = np.random.poisson(expected)
-                toy_hist1.SetBinContent(ix, iy, fluctuated)
+                #fluctuated = np.random.poisson(expected)
+                #toy_hist1.SetBinContent(ix, iy, fluctuated)
+                if (TOYorMC == "MC"):
+                  toy_hist1.SetBinContent(ix, iy, expected)
+                else:
+                  fluctuated = np.random.poisson(expected)
+                  toy_hist1.SetBinContent(ix, iy, fluctuated)
         toy_hist1.Write()
         toy_hist2 = hist2.Clone(hist2.GetName().replace("smooth1",f"smooth1_toy{i}"))
         for ix in range(1, hist2.GetNbinsX() + 1):
             for iy in range(1, hist2.GetNbinsY() + 1):
                 expected = hist2.GetBinContent(ix, iy)
-                fluctuated = np.random.poisson(expected)
-                toy_hist2.SetBinContent(ix, iy, fluctuated)
+                #fluctuated = np.random.poisson(expected)
+                #toy_hist2.SetBinContent(ix, iy, fluctuated)
+                if (TOYorMC == "MC"):
+                  toy_hist2.SetBinContent(ix, iy, expected)
+                else:
+                  fluctuated = np.random.poisson(expected)
+                  toy_hist2.SetBinContent(ix, iy, fluctuated)
         toy_hist2.Write()
         output_file.Close()
 

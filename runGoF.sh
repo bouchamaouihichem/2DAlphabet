@@ -1,26 +1,27 @@
 #!/bin/bash
 
 #########################################################################
-# Updated bash script to run the full MC Toy chain
-# Adapted from runtoystudy.sh by Hichem B
+# Script to make GoF plots for all categories and mass points
+# by Hichem.B
 #########################################################################
 
 # Start the timer
 START_TIME=$SECONDS
 
-# Adjust number of toys
-NTOYS='2' #minimum 2
+# Adjust number of toys used in GoF
+NTOYSGOF='200'
 
 # Are using 2D Alphabet output?
 WORKSPACE='2Dworkspace' # YES
 #WORKSPACE='No2Dworkspace' # No
 
 # Do you want to generate toys from MC or use MC directly?
-TOYORMC='TOY' # we are using toys in this script
-#TOYORMC='MC'
+#TOYORMC='TOY'
+TOYORMC='MC' #Use MC for GoF plots
 
+NTOYS='1' # we are not using toys so set to 1 (MC)
 INPUT_DIR='raw_inputs'
-OUTPUT_DIR='raw_outputs'
+OUTPUT_DIR='raw_outputs_gof'
 
 # Emptying the mctoysjson directory 
 echo " > Make new mctoysjson directory .. "
@@ -81,8 +82,6 @@ python3 Haa4b_makeMCtoy.py gg0lIncl $NTOYS $WORKSPACE $TOYORMC
 echo " > Run N toys and make Datacards .. "
 
 for k in XXHi XXLo VBFjjHi_Xto4bv2 VBFjjLo_Xto4bv2 gg0lIncl; do
-#for k in XXHi; do
-  #for i in $(seq 0 1 "$NTOYS"+1); do
   for ((i = 0; i < NTOYS; i++)); do
     echo ">>>>>>>>>> Making Toy number = $i of channel = $k"
     python3 htoaato4b_mctoy.py "$i" "$k"
@@ -101,16 +100,52 @@ for k in XXHi XXLo VBFjjHi_Xto4bv2 VBFjjLo_Xto4bv2 gg0lIncl; do
   done
 done
 
-# Combine datacards
-echo " > Merging Datacards .. "
-source Mergecards.sh "$NTOYS"
+# Running GoF for all mass points and categories
+for i in 15 30 55; do
+  for ((it = 0; it < NTOYS; it++)); do
 
-# Make summary plots
-echo " > Making summary plots .. "
-python3 Haa4b_limitsummary.py
-python3 Haa4b_fitsummary.py
+      # Generate Datacards
+      export Leptonic_cards="$( ls mctoysjson/fits_XX*_Htoaato4b_mH_pnet_mA_15to55_WP60_2018_toy${it}/mA_${i}_area/card*txt | sed 's/ / /g' | tr '\n' ' ' | sed 's/ $//' )"
+      export ggH_cards="$( ls mctoysjson/fits_gg0lIncl_Htoaato4b_mH_pnet_vs_massA34a_mA_15to55_WP40_2018_toy${it}/mA_${i}_area/card*txt | sed 's/ / /g' | tr '\n' ' ' | sed 's/ $//' )"
+      export VBF_cards="$( ls mctoysjson/fits_VBFjj*_Xto4bv2_Htoaato4b_mH_pnet_mA_15to55_WP40_2018_toy${it}/mA_${i}_area/card*.txt | sed 's/ / /g' | tr '\n' ' ' | sed 's/ $//' )"
+      #echo $Leptonic_cards
+      #echo $ggH_cards
+      #echo $VBF_cards
+      
+      # -- ALL --
+      combineCards.py $Leptonic_cards $ggH_cards $VBF_cards > mctoysjson/combined_ma_${i}_all.txt
+      # -- Leptonic --
+      combineCards.py $Leptonic_cards > mctoysjson/combined_ma_${i}_leptonic.txt
+      # -- VBF --
+      combineCards.py $VBF_cards > mctoysjson/combined_ma_${i}_vbf.txt
+      # -- ggH --
+      combineCards.py $ggH_cards > mctoysjson/combined_ma_${i}_ggh.txt
+    
+      # text2workspace.py
+      # -- Leptonic --
+      text2workspace.py mctoysjson/combined_ma_${i}_leptonic.txt --for-fits --no-wrappers --optimize-simpdf-constraints=cms --X-pack-asympows --use-histsum  --out mctoysjson/workspace_ma_${i}_leptonic.root
+      # -- VBF --
+      text2workspace.py mctoysjson/combined_ma_${i}_vbf.txt --for-fits --no-wrappers --optimize-simpdf-constraints=cms --X-pack-asympows --use-histsum  --out mctoysjson/workspace_ma_${i}_vbf.root
+      # -- ggH --
+      text2workspace.py mctoysjson/combined_ma_${i}_ggh.txt --for-fits --no-wrappers --optimize-simpdf-constraints=cms --X-pack-asympows --use-histsum  --out mctoysjson/workspace_ma_${i}_ggh.root
+      # -- ALL --
+      text2workspace.py mctoysjson/combined_ma_${i}_all.txt --for-fits --no-wrappers --optimize-simpdf-constraints=cms --X-pack-asympows --use-histsum  --out mctoysjson/workspace_ma_${i}_all.root
+      
+      # GoF
+      # -- Leptonic --
+      combine -M GoodnessOfFit mctoysjson/workspace_ma_${i}_leptonic.root --algo saturated -m 125 --freezeParameters MH -n .goodnessOfFit_${TOYORMC}_ma_${i}.leptonic 
+      combine -M GoodnessOfFit mctoysjson/workspace_ma_${i}_leptonic.root --algo saturated -m 125 --freezeParameters MH -n .goodnessOfFit_${TOYORMC}_ma_${i}.leptonic -t $NTOYSGOF 
+      # -- VBF --
+      combine -M GoodnessOfFit mctoysjson/workspace_ma_${i}_vbf.root --algo saturated -m 125 --freezeParameters MH -n .goodnessOfFit_${TOYORMC}_ma_${i}.vbf 
+      combine -M GoodnessOfFit mctoysjson/workspace_ma_${i}_vbf.root --algo saturated -m 125 --freezeParameters MH -n .goodnessOfFit_${TOYORMC}_ma_${i}.vbf -t $NTOYSGOF
+      # -- ggH --
+      combine -M GoodnessOfFit mctoysjson/workspace_ma_${i}_ggh.root --algo saturated -m 125 --freezeParameters MH -n .goodnessOfFit_${TOYORMC}_ma_${i}.ggh 
+      combine -M GoodnessOfFit mctoysjson/workspace_ma_${i}_ggh.root --algo saturated -m 125 --freezeParameters MH -n .goodnessOfFit_${TOYORMC}_ma_${i}.ggh -t $NTOYSGOF
+  done
+done
 
-# Emptying the input directory 
+
+# Emptying the output directory 
 echo " > Make new $OUTPUT_DIR directory .. "
 if [ -d "$OUTPUT_DIR" ]; then
    rm -rf "$OUTPUT_DIR"
@@ -118,11 +153,11 @@ fi
 mkdir "$OUTPUT_DIR"
 
 # Move output files to a single directory
-echo " > Moving outputs to raw_outputs/ "
-mv *png "$OUTPUT_DIR"
-mv higgsCombine.* "$OUTPUT_DIR"
-mv fitDiagnostics.* "$OUTPUT_DIR"
-mv combine_logger.out "$OUTPUT_DIR"
+echo " > Moving outputs to raw_outputs_gof/ "
+mv higgsCombine.goodness* "$OUTPUT_DIR"
+
+# Making GoF plots
+python3 Haa4b_gofsummary.py
 
 # Calculate elapsed time 
 ELAPSED=$((SECONDS - START_TIME))

@@ -947,7 +947,7 @@ def _runLimit(blindData, verbosity, setParams, card_or_w='card.txt', condor=Fals
     limit_cmd = 'combine -M AsymptoticLimits -d {card_or_w} --saveWorkspace --cminDefaultMinimizerStrategy 0 {param_opt} {blind_opt} -v {verb}' 
     limit_cmd = limit_cmd.format(
         card_or_w=card_or_w,
-        blind_opt='--run=blind' if blindData else '',
+        blind_opt='--run=expected' if blindData else '--run=both',
         param_opt=param_options,
         verb=verbosity
     )

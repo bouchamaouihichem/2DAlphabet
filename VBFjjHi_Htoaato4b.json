@@ -1,12 +1,12 @@
 {
-  "NAME": "XXLo_Htoaato4b",
+  "NAME": "VBFjjHi_Htoaato4b",
   "PROCESSES": {
     "data_obs": {
       "SYSTEMATICS":[],
       "SCALE": 1.0,
       "COLOR": 1,
       "TYPE": "DATA",
-      "ALIAS": "XXLo_Data_2018",
+      "ALIAS": "VBFjjHi_Data_2018",
       "TITLE": "Data",
       "LOC": "path/FILE:HIST"
     },
@@ -42,9 +42,9 @@
         "TITLE": "m_{H} (GeV)",
         "MIN": 60,
         "MAX": 220,
-        "NBINS": 8,
+        "NBINS": 16,
         "SIGSTART": 100,
-        "SIGEND": 140
+        "SIGEND": 150
       },
       "Y": {
         "NAME": "mA",

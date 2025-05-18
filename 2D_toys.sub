@@ -71,8 +71,7 @@ stream_output = True
 stream_error = True
 
 ### Default cpus is 1 CPU, 2GB memory and 20GB disk. This is scaled as you request more CPU (e.g: requesting 4 CPUs will automatically result in 8GB memory and 20GB disk
-request_cpus   = 8
-
+#request_cpus   = 8
 ### memory is a soft limit: job will be terminated if there is memory pressure on the node
 ###request_memory = 8GB 
 ###request_disk   = 2M

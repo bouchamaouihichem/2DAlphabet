@@ -30,8 +30,12 @@ arguments = $(SUBMIT_TIME)$(Proxy_path)$(ClusterId)$(ProcId)
 # use this command to see the list of OS: $ condor_status -compact -af OpSysAndVer | sort | uniq -c
 #requirements = (OpSysAndVer =?= "AlmaLinux9")
 #requirements = (OpSysAndVer =?= "CentOS7")
-#requirements = ( (OpSysAndVer =?= "CentOS7") && (CERNEnvironment =?= "qa") )
-MY.SingularityImage = "/cvmfs/unpacked.cern.ch/gitlab-registry.cern.ch/cms-cat/cmssw-lxplus/cmssw-el7-lxplus:latest/"
+
+# Use singularity image environment, does not work with 2D Alphabet from my tests
+#MY.SingularityImage = "/cvmfs/unpacked.cern.ch/gitlab-registry.cern.ch/cms-cat/cmssw-lxplus/cmssw-el7-lxplus:latest/"
+
+# Allows to make new directort if needed
+MY.XRDCP_CREATE_DIR     = True
 
 ### Copeis local environment, including CMSSW, but in theory 2D Alphabet as well
 #getenv = True

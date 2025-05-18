@@ -7,7 +7,8 @@ NTOYGOF=100        ## Number of toys 2DAlphabet will run for goodness-of-fit tes
 YEAR="2018"
 
 ## Output EOS directory to move ROOT files (avoid disk quota issues)
-EOS_OUT_DIR="/eos/cms/store/user/abrinke1/HiggsToAA/2DAlphabet/ToyStudies/2025_05_15/"
+#EOS_OUT_DIR="/eos/cms/store/user/abrinke1/HiggsToAA/2DAlphabet/ToyStudies/2025_05_15/"
+EOS_OUT_DIR="ToyStudies/test/"
 echo "Just to be sure, you want to output to:"
 echo ${EOS_OUT_DIR}
 

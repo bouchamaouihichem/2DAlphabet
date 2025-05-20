@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # Number of Toys
-N=10
+N=5
+# Condor log directory
+LOG_DIR="Condor_output"
 
 # Template files
 SH_TEMPLATE="2D_toys.sh"
 SUB_TEMPLATE="2D_toys.sub"
-
 
 # Check if both templates exist
 if [[ ! -f $SH_TEMPLATE ]]; then
@@ -18,12 +19,16 @@ if [[ ! -f $SUB_TEMPLATE ]]; then
   echo "Error: $SUB_TEMPLATE not found!"
   exit 1
 fi
-# Emptying the mctoysjson directory 
-echo " > Make Condor directory .. "
-if [ -d "Condor_dir" ]; then
-   rm -rf "Condor_dir"
+
+# Emptying Condor log directory 
+echo " > Make new $LOG_DIR directory .. "
+if [ -d "$LOG_DIR" ]; then
+   rm -rf "$LOG_DIR"
 fi
-mkdir "Condor_dir"
+mkdir "$LOG_DIR"
+
+echo "Deleting .sub/.sh file of previous condor submission"
+rm 2D_toys_*
 
 # Loop over N toy jobs
 for ((i=0; i<N; i++)); do
@@ -40,9 +45,6 @@ for ((i=0; i<N; i++)); do
   echo "Created $SH_OUT and $SUB_OUT"
   
   echo "Submitting jobs for Toy ${i}"
-  condor_submit 2D_toys_${i}.sub
-  
-  echo "Deleting all condor .sh and .sub files after submission"
-  rm $SH_OUT
-  rm $SUB_OUT
+  condor_submit 2D_toys_${i}.sub  
 done
+
